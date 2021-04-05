@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 // import './Score.css';
 
 function Score({ highscore }) {
-  // const scoresContext = useContext(ScoresContext);
   const { game, date, player, score } = highscore;
 
   return (

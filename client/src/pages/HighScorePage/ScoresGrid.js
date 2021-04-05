@@ -10,6 +10,15 @@ function ScoresGrid() {
     (state) => state.highscores
   );
 
+  const groupByGame = (score) => {
+    let group = score.reduce((r, a) => {
+      r[a.game.title] = [...(r[a.game.title] || []), a];
+      return r;
+    }, []);
+    let result = Object.values(group.sort((a, b) => b.score - a.score));
+    return result;
+  };
+
   useEffect(() => {
     dispatch(getSortScoreByGame());
   }, [dispatch]);
@@ -24,11 +33,9 @@ function ScoresGrid() {
       <Link to={'/new'} className="btn btn-outline-primary mb-3">
         Registrera event
       </Link>
-      {Object.values(highscores.sort((a, b) => b.score - a.score)).map(
-        (score, index) => (
-          <Score key={index} highscore={score[0]} />
-        )
-      )}
+      {groupByGame(highscores).map((score, index) => (
+        <Score key={index} highscore={score[0]} />
+      ))}
     </div>
   );
 }

@@ -15,8 +15,7 @@ export const getSortScoreByGame = () => {
     await scoreServices
       .getScores()
       .then((response) => {
-        const result = groupByGame(response.data);
-        dispatch({ type: FETCH_SUCCESS, payload: result });
+        dispatch({ type: FETCH_SUCCESS, payload: response.data });
       })
       .catch((error) => {
         dispatch({ type: FETCH_ERROR, payload: error.message });
@@ -44,8 +43,9 @@ export const registerHighScore = (data) => {
     scoreServices
       .addScore(data)
       .then((response) => {
+        console.log('New Register => ', response.data);
         toast.success('Added SUCCESS');
-        // dispatch({ type: REGISTER_SUCCESS, payload: response.data });
+        dispatch({ type: REGISTER_SUCCESS, payload: response.data });
       })
       .catch((error) => {
         toast.success(error);
@@ -54,11 +54,11 @@ export const registerHighScore = (data) => {
   };
 };
 
-function groupByGame(score) {
-  let group = score.reduce((r, a) => {
+const groupByGame = async (score) => {
+  let group = await score.reduce((r, a) => {
     r[a.game.title] = [...(r[a.game.title] || []), a];
     return r;
   }, []);
   // let result = Object.values(group.sort((a, b) => b.score - a.score));
   return group;
-}
+};
