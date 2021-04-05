@@ -7,8 +7,9 @@ import Score from './Score';
 function ScoresGrid() {
   const dispatch = useDispatch();
   const { highscores, loading, error } = useSelector(
-    (state) => state.highScore
+    (state) => state.highscores
   );
+
   useEffect(() => {
     dispatch(getSortScoreByGame());
   }, [dispatch]);
@@ -23,9 +24,11 @@ function ScoresGrid() {
       <Link to={'/new'} className="btn btn-outline-primary mb-3">
         Registrera event
       </Link>
-      {highscores.map((score, index) => (
-        <Score key={index} highscore={score} />
-      ))}
+      {Object.values(highscores.sort((a, b) => b.score - a.score)).map(
+        (score, index) => (
+          <Score key={index} highscore={score[0]} />
+        )
+      )}
     </div>
   );
 }

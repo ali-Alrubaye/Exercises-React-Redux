@@ -4,7 +4,7 @@ import scoreReducer from './HighScore/ScoreReducer';
 import gameReducer from './Game/GameReducer';
 
 const rootReducer = combineReducers({
-  highScore: scoreReducer,
+  highscores: scoreReducer,
   game: gameReducer,
 });
 

@@ -45,6 +45,9 @@ const reducer = (state = initialState, action) => {
         error: '',
       };
     case REMOVE_SUCCESS:
+      let tt = state.highscores.filter((scor) => scor._id !== action.payload);
+      console.log('state.highscores', state.highscores);
+      console.log(tt);
       return {
         ...state,
         loading: false,
