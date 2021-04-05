@@ -7,8 +7,18 @@ import Score from './Score';
 function ScoresGrid() {
   const dispatch = useDispatch();
   const { highscores, loading, error } = useSelector(
-    (state) => state.highScore
+    (state) => state.highscores
   );
+
+  const groupByGame = (score) => {
+    let group = score.reduce((r, a) => {
+      r[a.game.title] = [...(r[a.game.title] || []), a];
+      return r;
+    }, []);
+    let result = Object.values(group.sort((a, b) => b.score - a.score));
+    return result;
+  };
+
   useEffect(() => {
     dispatch(getSortScoreByGame());
   }, [dispatch]);
@@ -23,8 +33,8 @@ function ScoresGrid() {
       <Link to={'/new'} className="btn btn-outline-primary mb-3">
         Registrera event
       </Link>
-      {highscores.map((score, index) => (
-        <Score key={index} highscore={score} />
+      {groupByGame(highscores).map((score, index) => (
+        <Score key={index} highscore={score[0]} />
       ))}
     </div>
   );

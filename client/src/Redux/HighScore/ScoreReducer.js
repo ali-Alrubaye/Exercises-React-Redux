@@ -22,6 +22,7 @@ const reducer = (state = initialState, action) => {
         error: '',
       };
     case FETCH_SUCCESS:
+      console.log('Fetch Success ', action.payload);
       return {
         ...state,
         loading: false,
@@ -38,6 +39,7 @@ const reducer = (state = initialState, action) => {
     case REGISTER_SUCCESS:
       // const add_state = [...state.highscores];
       // add_state = [...state.highscores, action.payload];
+      console.log('Reduser => ', state.highscores);
       return {
         ...state,
         loading: false,
@@ -45,6 +47,9 @@ const reducer = (state = initialState, action) => {
         error: '',
       };
     case REMOVE_SUCCESS:
+      let tt = state.highscores.filter((scor) => scor._id !== action.payload);
+      console.log('state.highscores', state.highscores);
+      console.log(tt);
       return {
         ...state,
         loading: false,

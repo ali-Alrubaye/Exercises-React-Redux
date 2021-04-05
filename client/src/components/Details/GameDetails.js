@@ -5,30 +5,33 @@ import { useDispatch } from 'react-redux';
 import { deleteHighScore } from '../../Redux';
 
 function GameDetails() {
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+
   const [filters, setFilters] = useState({});
-  const [highTen, setHighTen] = useState([]);
-  const [highLoading, setHighLoading] = useState(true);
+  const [loadingGame, setLoadingGame] = useState(true);
+  const [data, setData] = useState([]);
+  const [loadHig, setLoadHig] = useState(true);
+
   const history = useHistory();
   let { slug } = useParams();
-  const dispatch = useDispatch();
+
   useEffect(() => {
-    getGameBytitle(slug)
+    gethightenScore(slug)
       .then((response) => {
-        setFilters(response.data);
+        setData(response.data);
       })
-      .then(() => setLoading(false))
+      .then(() => setLoadHig(false))
       .catch((error) => {
         console.log('not found');
       });
   }, [slug]);
 
   useEffect(() => {
-    gethightenScore(slug)
+    getGameBytitle(slug)
       .then((response) => {
-        setHighTen(response.data);
+        setFilters(response.data);
       })
-      .then(() => setHighLoading(false))
+      .then(() => setLoadingGame(false))
       .catch((error) => {
         console.log('not found');
       });
@@ -45,7 +48,7 @@ function GameDetails() {
         <h1 className="col-12 text-center m-2">Highscores</h1>
       </div>
       <div className="">
-        {loading ? (
+        {loadingGame ? (
           <h3 className="">Not found</h3>
         ) : (
           <div className="card">
@@ -77,10 +80,10 @@ function GameDetails() {
         )}
       </div>
       <div className="row mt-3">
-        {highLoading ? (
+        {loadHig ? (
           <h3>don't have score</h3>
         ) : (
-          highTen.map((game) => (
+          data.map((game) => (
             <div key={game._id} className="card mb-3">
               <h3>{game.title}</h3>
               <div className="row no-gutters">

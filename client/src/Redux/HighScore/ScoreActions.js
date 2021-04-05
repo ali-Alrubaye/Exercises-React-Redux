@@ -10,10 +10,10 @@ import scoreServices from '../../services/Service';
 import { toast } from 'react-toastify';
 
 export const getSortScoreByGame = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_REQUEST });
-    scoreServices
-      .getHighScores()
+    await scoreServices
+      .getScores()
       .then((response) => {
         dispatch({ type: FETCH_SUCCESS, payload: response.data });
       })
@@ -29,7 +29,7 @@ export const deleteHighScore = (id) => {
       .deleteScores(id)
       .then((response) => {
         console.log(response);
-        // dispatch({ type: REMOVE_SUCCESS, payload: response.data });
+        dispatch({ type: REMOVE_SUCCESS, payload: id });
       })
       .catch((error) => {
         console.log(error);
@@ -43,6 +43,7 @@ export const registerHighScore = (data) => {
     scoreServices
       .addScore(data)
       .then((response) => {
+        console.log('New Register => ', response.data);
         toast.success('Added SUCCESS');
         dispatch({ type: REGISTER_SUCCESS, payload: response.data });
       })
@@ -51,4 +52,13 @@ export const registerHighScore = (data) => {
         dispatch({ type: FETCH_ERROR, payload: error.message });
       });
   };
+};
+
+const groupByGame = async (score) => {
+  let group = await score.reduce((r, a) => {
+    r[a.game.title] = [...(r[a.game.title] || []), a];
+    return r;
+  }, []);
+  // let result = Object.values(group.sort((a, b) => b.score - a.score));
+  return group;
 };
